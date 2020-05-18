@@ -313,6 +313,7 @@ func (m *DbMap) readStructColumns(t reflect.Type) (cols []*ColumnMap, primaryKey
 			var isAuto bool
 			var isPK bool
 			var isNotNull bool
+			var selectonly bool
 			for _, argString := range cArguments[1:] {
 				argString = strings.TrimSpace(argString)
 				arg := strings.SplitN(argString, ":", 2)
@@ -342,6 +343,8 @@ func (m *DbMap) readStructColumns(t reflect.Type) (cols []*ColumnMap, primaryKey
 					isAuto = true
 				case "notnull":
 					isNotNull = true
+				case "selectonly":
+					selectonly = true
 				default:
 					panic(fmt.Sprintf("Unrecognized tag option for field %v: %v", f.Name, arg))
 				}
@@ -384,6 +387,7 @@ func (m *DbMap) readStructColumns(t reflect.Type) (cols []*ColumnMap, primaryKey
 				ColumnName:   columnName,
 				DefaultValue: defaultValue,
 				Transient:    columnName == "-",
+				Selectonly:   selectonly,
 				fieldName:    f.Name,
 				gotype:       gotype,
 				isPK:         isPK,

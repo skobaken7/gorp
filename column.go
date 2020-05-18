@@ -17,6 +17,10 @@ type ColumnMap struct {
 	// If true, this column is skipped in generated SQL statements
 	Transient bool
 
+	// If true, this column is skipped in Update
+	// ColumnFilter is preferred over this.
+	Selectonly bool
+
 	// If true, " unique" is added to create table statements.
 	// Not used elsewhere
 	Unique bool
@@ -50,6 +54,13 @@ func (c *ColumnMap) Rename(colname string) *ColumnMap {
 // this column will be skipped when SQL statements are generated
 func (c *ColumnMap) SetTransient(b bool) *ColumnMap {
 	c.Transient = b
+	return c
+}
+
+// SetSelectonly allows you to mark the column as select only. If true
+// this column will be skipped in Update
+func (c *ColumnMap) SetSelectonly(b bool) *ColumnMap {
+	c.Selectonly = b
 	return c
 }
 
